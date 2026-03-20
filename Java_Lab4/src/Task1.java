@@ -7,7 +7,7 @@ import java.util.Scanner;
 import java.util.stream.Stream;
 
 public class Task1 {
-    // Поле для формата даты
+    /// Поле для формата даты
     private static final DateTimeFormatter _dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     // Исполняющая функция
     public static void main(String[] args) {
@@ -29,7 +29,7 @@ public class Task1 {
             }
         }
     }
-    // Вывод всех команд
+    /// Вывод всех команд
     private static void DisplayCommands() {
         System.out.println("=== Файловый менеджер ===");
         System.out.println("Текущая папка: " + Paths.get("").toAbsolutePath());
@@ -41,7 +41,7 @@ public class Task1 {
         System.out.println("6 Выход");
         System.out.println("Выберите действие: ");
     }
-    // Показ содержимого папки
+    /// Показ содержимого папки
     private static void DisplayFolderContent() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите путь к папке: ");
@@ -78,7 +78,7 @@ public class Task1 {
             System.err.println("Ошибка ввода/вывода: " + e.getMessage());
         }
     }
-    // Создание папки
+    /// Создание папки
     private static void CreateFolder() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите путь для новой папки: ");
@@ -102,7 +102,7 @@ public class Task1 {
             System.err.println("Ошибка ввода/вывода: " + e.getMessage());
         }
     }
-    // Удаление файла или папки
+    /// Удаление файла или папки
     private static void DeleteFileOrFolder() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Введите путь для удаления: ");
@@ -136,7 +136,7 @@ public class Task1 {
             System.err.println("Ошибка ввода/вывода: " + e.getMessage());
         }
     }
-    // Копирование файла
+    /// Копирование файла
     private static void CopyFile() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите путь к источнику: ");
@@ -159,7 +159,7 @@ public class Task1 {
             System.err.println("Ошибка ввода/вывода: " + e.getMessage());
         }
     }
-    // Перемещение/переименование
+    /// Перемещение/переименование
     private static void MoveOrRename() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Введите путь к источнику: ");
