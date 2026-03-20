@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Task4 {
+    // Исполняющая функция
     public static void main(String[] args) {
         FindDuplicates();
     }
