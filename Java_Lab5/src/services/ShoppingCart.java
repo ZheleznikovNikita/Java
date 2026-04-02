@@ -1,6 +1,10 @@
+package services;
+
+import models.Product;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import utils.ValidationUtils;
 
 public class ShoppingCart {
     // Поля
@@ -11,10 +15,10 @@ public class ShoppingCart {
 
     // Добавление продукта в корзину
     public void addProduct(Product product, int quantity) throws Exception {
-        if (!product.isAvailable())
+        ValidationUtils.check_number_less_or_equal(quantity, "Количество должно быть положительным");
+        if (!product.isAvailable()) {
             throw new Exception("Нельзя взять товар, которого нет на складе");
-        if (quantity <= 0)
-            throw new Exception("Количество должно быть положительным");
+        }
         if (product.getQuantityInStock() < quantity)
             throw new Exception("Товара не хватает на складе");
         if (items.containsKey(product)) {
@@ -28,8 +32,7 @@ public class ShoppingCart {
     }
     // Удаление продукта из корзины
     public void removeProduct(String productName) throws Exception {
-        if (productName == null)
-            throw new Exception("Имя товара не может быть пустым");
+        ValidationUtils.check_name(productName, "Имя товара не может быть пустым");
         Map.Entry<Product, Integer> p = null;
         for (var elem : items.entrySet())
             if (Objects.equals(elem.getKey().getName(), productName))

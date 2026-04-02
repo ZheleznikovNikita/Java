@@ -1,3 +1,5 @@
+package utils;
+
 import java.time.LocalTime;
 
 public class Time {
@@ -6,13 +8,21 @@ public class Time {
     private int minutes;
     private int seconds;
 
+    static private final int min_time = 0;
+    static private final int max_hours = 23;
+    static private final int max_minutes_and_seconds = 59;
+    static private final int step = 60;
+    static private final int step_for_hour = 3600;
+    static private final int hours_in_day = 24;
+    static private final int middle = 12;
+
     // Конструкторы
     public Time(int hours, int minutes, int seconds) throws Exception {
-        if (hours < 0 || hours > 23)
+        if (hours < min_time || hours > max_hours)
             throw new Exception("Некорректный час");
-        if (minutes < 0 || minutes > 59)
+        if (minutes < min_time || minutes > max_minutes_and_seconds)
             throw new Exception("Некорректные минуты");
-        if (seconds < 0 || seconds > 59)
+        if (seconds < min_time || seconds > max_minutes_and_seconds)
             throw new Exception("Некорректные секунды");
         this.hours = hours;
         this.minutes = minutes;
@@ -31,32 +41,29 @@ public class Time {
 
     // Добавление секунд
     public void addSeconds(int seconds) throws Exception {
-        if (seconds < 0)
-            throw new Exception("Время не может быть отрицательным");
+        ValidationUtils.check_number_less(seconds, "Время не может быть отрицательным");
         var total = this.seconds + seconds;
-        this.seconds = total % 60;
-        var extra = total / 60;
+        this.seconds = total % step;
+        var extra = total / step;
         addMinutes(extra);
     }
     // Добавление минут
     public void addMinutes(int minutes) throws Exception {
-        if (minutes < 0)
-            throw new Exception("Время не может быть отрицательным");
+        ValidationUtils.check_number_less(minutes, "Время не может быть отрицательным");
         var total = this.minutes + minutes;
-        this.minutes = total % 60;
-        var extra = total / 60;
+        this.minutes = total % step;
+        var extra = total / step;
         addHours(extra);
     }
     // Добавление часов
     public void addHours(int hours) throws Exception {
-        if (hours < 0)
-            throw new Exception("Время не может быть отрицательным");
-        this.hours = (this.hours + hours) % 24;
+        ValidationUtils.check_number_less(hours, "Время не может быть отрицательным");
+        this.hours = (this.hours + hours) % hours_in_day;
     }
     // Разница во времени в секундах
     public int differenceInSeconds(Time other) {
-        int fst = getHours() * 3600 + getMinutes() * 60 + getSeconds();
-        int snd = other.getHours() * 3600 + other.getMinutes() * 60 + other.getSeconds();
+        int fst = getHours() * step_for_hour + getMinutes() * step + getSeconds();
+        int snd = other.getHours() * step_for_hour + other.getMinutes() * step + other.getSeconds();
         return  Math.abs(snd - fst);
     }
     // Вывод в 24-часовом формате
@@ -65,9 +72,12 @@ public class Time {
     }
     // Вывод в 12-часовом формате
     public void print12h() {
-        String AmPm = getHours() < 12 ? "AM" : "PM";
-        int hours_12 = getHours() % 12;
-        if (hours_12 == 0) hours_12 = 12;
+        String AmPm = getHours() < middle ? "AM" : "PM";
+        int hours_12 = getHours() % middle;
+        if (hours_12 == min_time)
+            hours_12 = middle;
         System.out.printf("%02d:%02d:%02d %s", hours_12, getMinutes(), getSeconds(), AmPm);
     }
 }
+
+// Добавлены константы для проверки времени и выполнении шагов

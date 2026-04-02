@@ -1,3 +1,6 @@
+package models;
+import utils.ValidationUtils;
+
 import java.time.Year;
 
 public class Book {
@@ -8,6 +11,12 @@ public class Book {
     private int pages;
     private String publisher;
     private boolean isAvailable;
+
+    private static final int old_year = 1450;
+    private static final int possible_age = 50;
+
+    // using VU = ValidationUtils
+    // Хотелось бы
 
     // Конструкторы
     public Book(String title, String author, int year, int pages, String publisher, boolean isAvailable) throws Exception {
@@ -31,28 +40,24 @@ public class Book {
     public boolean getIsAvailable() { return isAvailable; }
     // Сеттеры
     public void setTitle(String title) throws Exception {
-        if (title == null)
-            throw new Exception("Пустое название заголовка");
+        ValidationUtils.check_name(title, "Пустое название заголовка");
         this.title = title;
     }
     public void setAuthor(String author) throws Exception {
-        if (author == null)
-            throw new Exception("Пустое имя автора");
+        ValidationUtils.check_name(author, "Пустое имя автора");
         this.author = author;
     }
     public void setYear(int year) throws Exception {
-        if (year < 1450)
+        if (year < old_year)
             throw new Exception("Год не может быть меньше 1450");
         this.year = year;
     }
     public void setPages(int pages) throws Exception {
-        if (pages <= 0)
-            throw new Exception("Количество страниц не можети быть отрицательным или нулевым");
+        ValidationUtils.check_number_less_or_equal(pages, "Количество страниц не можети быть отрицательным или нулевым");
         this.pages = pages;
     }
     public void setPublisher(String publisher) throws Exception {
-        if (publisher == null)
-            throw new Exception("Издательство не может быть пустым");
+        ValidationUtils.check_name(publisher, "Издательство не может быть пустым");
         this.publisher = publisher;
     }
     public void setIsAvailable(boolean isAvailable) { this.isAvailable = isAvailable; }
@@ -80,5 +85,8 @@ public class Book {
             System.out.println("Книга уже доступна");
     }
     // Проверка возрастра книги
-    boolean isOld() { return (Year.now().getValue() - year) > 50; }
+    public boolean isOld() { return (Year.now().getValue() - year) > possible_age; }
 }
+
+// Добавлены константы для проверки возрастов, проверки вынесены в отдельный класс,
+// в дальнейшем наличие проверок не будет учитываться при составлении комментария

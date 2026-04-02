@@ -1,3 +1,7 @@
+package models;
+
+import utils.ValidationUtils;
+
 public class BankAccount {
     // Поля
     private String accountNumber;
@@ -23,24 +27,20 @@ public class BankAccount {
     public  boolean getIsActive() { return isActive; }
     // Сеттеры
     public void setAccountNumber(String accountNumber) throws Exception {
-        if (accountNumber == null)
-            throw new Exception("Пустой номер аккаунта");
+        ValidationUtils.check_name(accountNumber, "Пустой номер аккаунта");
         this.accountNumber = accountNumber;
     }
     public void setOwnerName(String ownerName) throws Exception {
-        if (ownerName == null)
-            throw new Exception("Пустое имя пользователя");
+        ValidationUtils.check_name(ownerName, "Пустое имя пользователя");
         this.ownerName = ownerName;
     }
     public void setInterestRate(double interestRate) throws Exception {
-        if (interestRate <= 0)
-            throw new Exception("Процентная ставка должна быть положительной");
+        ValidationUtils.check_number_less_or_equal(interestRate, "Процентная ставка должна быть положительной");
         this.interestRate = interestRate;
     }
     // Пополнение карты
     public void deposit(double amount) throws Exception {
-        if (amount <= 0)
-            throw new Exception("Пополнять можно только на положительную сумму");
+        ValidationUtils.check_number_less_or_equal(amount, "Пополнять можно только на положительную сумму");
         if (getIsActive())
             balance += amount;
         else

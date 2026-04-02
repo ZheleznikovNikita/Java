@@ -1,4 +1,8 @@
+package models;
+
 import java.time.*;
+import utils.ValidationUtils;
+
 public class Employee {
     // Поля
     private String fullName;
@@ -7,6 +11,9 @@ public class Employee {
     private double salary;
     private LocalDate hireDate;
     private double bonus;
+
+    private static final int experience_for_promotion = 3;
+    private static final int salary_for_promotion = 100000;
 
     // Конструкторы
     public Employee(String fullName, String position, String department, double salary, LocalDate hireDate) throws Exception {
@@ -31,29 +38,24 @@ public class Employee {
 
     // Сеттеры
     public void setFullName(String fullName) throws Exception {
-        if (fullName == null)
-            throw new Exception("Имя не должно быть пустым");
+        ValidationUtils.check_name(fullName, "Имя не должно быть пустым");
         this.fullName = fullName;
     }
     public void setPosition(String position) throws Exception {
-        if (position == null)
-            throw new Exception("Должность не может быть пустой");
+        ValidationUtils.check_name(position, "Должность не может быть пустой");
         this.position = position;
     }
     public void setDepartment(String department) throws Exception {
-        if (department == null)
-            throw new Exception("отдел не может быть пустым");
+        ValidationUtils.check_name(department, "Отдел не может быть пустым");
         this.department = department;
     }
     public void setSalary(double salary) throws Exception {
-        if (salary <= 0)
-            throw new Exception("Зарплата не может быть неотрицательной");
+        ValidationUtils.check_number_less_or_equal(salary, "Зарплата должна быть положительной");
         this.salary = salary;
     }
     public void setHireDate(LocalDate hireDate) { this.hireDate = hireDate; }
     public void setBonus(double bonus) throws Exception {
-        if (bonus < 0)
-            throw new Exception("Надбавка не может быть отрицательной");
+        ValidationUtils.check_number_less(bonus, "Надбавка не может быть отрицательной");
         this.bonus = bonus;
     }
 
@@ -62,7 +64,7 @@ public class Employee {
     // Количество полных лет работы
     public int getExperience() { return Period.between(getHireDate(), LocalDate.now()).getYears(); }
     // Проверка на повышение
-    public boolean isEligibleForPromotion() { return getExperience() > 3  && getSalary() < 100000; } // Возможно лучше взять getTotalSalary, по заданию нет уточнения
+    public boolean isEligibleForPromotion() { return getExperience() > experience_for_promotion  && getSalary() < salary_for_promotion; } // Возможно лучше взять getTotalSalary, по заданию нет уточнения
     // Вывод информации
     public void printInfo() {
         System.out.println("ФИО: " + getFullName());
@@ -76,3 +78,5 @@ public class Employee {
         System.out.println("Можно повысить? " + (isEligibleForPromotion() ? "Да" : "Нет"));
     }
 }
+
+// Добавлены константы для проверки возможности повышения

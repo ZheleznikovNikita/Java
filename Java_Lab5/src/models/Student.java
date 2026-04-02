@@ -1,3 +1,7 @@
+package models;
+
+import utils.ValidationUtils;
+
 import java.util.Arrays;
 
 public class Student {
@@ -7,6 +11,11 @@ public class Student {
     private int studentId;
     private int[] grades;
     private boolean hasScholarship;
+
+    private static final int grades_count = 5;
+    private static final int min_grade = 2;
+    private static final int max_grade = 5;
+    private static final double scholarship_average = 4.5;
 
     // Конструктор
     public Student(String fullName, String groupId, int studentId, int[] grades) throws Exception {
@@ -29,30 +38,27 @@ public class Student {
     public boolean getHasScholarship() { return hasScholarship; }
     // Сеттеры
     public void setFullName(String fullName) throws Exception {
-        if (fullName == null)
-            throw new Exception("Пустое имя");
+        ValidationUtils.check_name(fullName, "Пустое имя");
         this.fullName = fullName;
     }
     public void setGroupId(String groupId) throws Exception {
-        if (groupId == null)
-            throw new Exception("Номер группы не может быть отрицательным");
+        ValidationUtils.check_name(groupId, "Номер группы не может быть пустым");
         this.groupId = groupId;
     }
     public void setStudentId(int studentId) throws Exception {
-        if (studentId <= 0)
-            throw new Exception("Номер студенческого билета не может быть отрицательным");
+        ValidationUtils.check_number_less_or_equal(studentId, "Номер студенческого билета должен быть положительным");
         this.studentId =  studentId;
     }
     public void setGrades(int[] grades) throws Exception {
-        if (grades.length != 5)
+        if (grades.length != grades_count)
             throw new Exception("Массив неверного размера");
         for (var elem : grades)
-            if (elem < 2 || elem > 5)
+            if (elem < min_grade || elem > max_grade)
                 throw new Exception("Оценка не может быть меньше двух или больше 5");
         this.grades = grades;
     }
     public void setGrade(int grade, int index) throws Exception {
-        if (grade < 2 || grade > 5)
+        if (grade < min_grade || grade > max_grade)
             throw new Exception("Оценка не может быть меньше двух или больше 5");
         if (index < 0 || index > 4)
             throw new Exception("Индекс за пределами массива");
@@ -60,7 +66,7 @@ public class Student {
     }
     public void updateScholarshipStatus() {
         var average = calculateAverage();
-        hasScholarship = average >= 4.5;
+        hasScholarship = average >= scholarship_average;
     }
     // Вычисление среднего балла
     public double calculateAverage() {
@@ -87,6 +93,8 @@ public class Student {
     }
     // Проверка на количество 5
     public boolean isExcellent() {
-        return Arrays.stream(grades).allMatch(x -> x == 5);
+        return Arrays.stream(grades).allMatch(x -> x == max_grade);
     }
 }
+
+// Добавлены константы для оценок и стипендии

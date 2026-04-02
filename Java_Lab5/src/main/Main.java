@@ -1,3 +1,7 @@
+import models.*;
+import services.ShoppingCart;
+import utils.Time;
+
 void main() {
     // Задание 1 "Класс Book"
     try {
