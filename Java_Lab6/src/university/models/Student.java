@@ -9,7 +9,7 @@ public class Student {
     private long studentId;
     private ArrayList<Course> courses;
 
-    private static int totalStudents;
+    private static int totalStudents = 0;
     private static final int max_courses = 5;
 
     public Student(String fullName) throws Exception {

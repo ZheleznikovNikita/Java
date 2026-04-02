@@ -8,7 +8,7 @@ public class Course {
     private Professor teacher;
     private ArrayList<Student> students;
 
-    private static int totalCourses;
+    private static int totalCourses = 0;
     private static final int max_students = 5;
 
     public Course(String courseName, Professor teacher) throws Exception {
