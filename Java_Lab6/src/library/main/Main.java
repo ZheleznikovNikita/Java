@@ -38,8 +38,8 @@ public class Main {
             System.out.println("Книги Джошуа Блоха: " + blochBooks.size());
 
             System.out.println("\nВозврат и новая выдача");
-            reader1.returnBook(library.get(0)); // Возвращает "Чистый код"
-            reader2.borrowBook(library.get(0)); // Теперь должно пройти успешно
+            reader1.returnBook(library.get(0));
+            reader2.borrowBook(library.get(0));
 
             System.out.println("\nИтоговая информация");
             System.out.println("Всего книг: " + Book.getTotalBooks());

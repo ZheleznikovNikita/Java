@@ -7,7 +7,7 @@ import university.utils.*;
 public class Main {
     static void main() throws Exception {
         try {
-            Professor prof = new Professor("Dr. Smith", "Java language");
+            Professor prof = new Professor("Данил Валерьевич", "Java language");
 
             Course math = new Course(StringUtils.capitalize("Java language"), prof);
             Course physics = new Course(StringUtils.capitalize("math"), prof);
@@ -29,14 +29,12 @@ public class Main {
             EnrollmentService.enrollStudentToCourse(students[1], math);
             EnrollmentService.enrollStudentToCourse(students[2], math);
 
-            // Тест дублирующей записи
             EnrollmentService.enrollStudentToCourse(students[2], math);
 
-            System.out.println("\n--- Итоговая статистика ---");
+            System.out.println("\nИтоговая статистика");
             System.out.println("Всего студентов: " + Student.getTotalStudents());
             System.out.println("Всего курсов: " + Course.getTotalCourses());
 
-            // Проверка содержимого массивов
             System.out.println("\nСтудент " + students[0].getFullName() + " записан на курсов: " + students[0].getEnrolledCoursesCount());
             System.out.println("На курсе " + math.getCourseName() + " студентов: " + math.getEnrolledStudentsCount() + " из " + math.getMaxStudents());
         }
