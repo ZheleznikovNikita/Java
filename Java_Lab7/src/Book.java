@@ -96,9 +96,7 @@ public class Book {
                 "\nBorrowed copies: " + borrowedCopies +
                 "\nAvailable: " + (isAvailable() ? "Yes\n" : "No\n");
     }
-}
 
-class Task1 {
     static void main() {
         try {
             Book book1 = new Book("Война и мир", "Лев Толстой");

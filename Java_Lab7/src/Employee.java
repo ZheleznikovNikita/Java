@@ -13,7 +13,7 @@ public class Employee {
     private Employee(int id, String fullName, String department, double salary, int hireYear) {
         this.id = id;
         this.fullName = fullName;
-        this.department =  department;
+        this.department = department;
         this.salary = salary;
         this.hireYear = hireYear;
         ++nextId;
@@ -51,9 +51,8 @@ public class Employee {
                 "\nDepartment: " + department +
                 "\nSalary: " + salary +
                 "\nDate of hiring: " + hireYear;
-}
+    }
 
-static class Task2 {
     static void main() {
         Employee emp1 = Employee.createEmployee("Иван Иванов", "Разработка", 120000.0, 2024);
         System.out.println("Создан сотрудник: " + emp1);
@@ -65,7 +64,6 @@ static class Task2 {
         createWithValidation("John Doe", "Маркетинг", 80000.0, 2030);
     }
 
-    // Вспомогательный метод для демонстрации обработки исключений
     private static void createWithValidation(String name, String dept, double sal, int year) {
         try {
             Employee e = Employee.createEmployee(name, dept, sal, year);
@@ -74,6 +72,5 @@ static class Task2 {
         catch (IllegalArgumentException ex) {
             System.out.println("Ошибка: " + ex.getMessage());
         }
-    }
     }
 }
