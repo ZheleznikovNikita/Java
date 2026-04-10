@@ -15,7 +15,7 @@ public class Car {
 
     static {
         availableColors = new HashSet<String>();
-        Collections.addAll(availableColors,  "Red", "Blue", "Black", "White",  "Silver");
+        Collections.addAll(availableColors, "Red", "Blue", "Black", "White", "Silver");
     }
 
     public Car(String model, String color, int year) throws IllegalArgumentException {
