@@ -43,7 +43,7 @@ public class ImmutableRectangle {
         System.out.println("\nИсходный объект после вызова withWidth:");
         System.out.println(rect1);
 
-        System.out.println("\nОбъект после изменения ширины и длины");
+        System.out.println("\nОбъект после изменения ширины и длины:");
         ImmutableRectangle rect3 = rect1.withWidth(7.0).withHeight(4.0);
         System.out.println(rect3);
 
