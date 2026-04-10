@@ -1,3 +1,5 @@
+package models;
+
 import java.time.Year;
 import utils.ValueChecker;
 

@@ -1,3 +1,5 @@
+package models;
+
 import utils.ValueChecker;
 
 import java.util.Collections;

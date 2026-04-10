@@ -1,3 +1,5 @@
+package services;
+
 public class InitializationDemo {
     private static final String staticField = initStaticField();
     private final String instanceField = initInstanceField();
