@@ -1,7 +1,6 @@
-package phonebook;
-
+package phonebook.utils;
 public class Checker {
-    static void check_string(String s) {
+    public static void check_string(String s) {
         if (s == null || s.trim().isEmpty())
             throw new IllegalArgumentException("Empty string");
     }

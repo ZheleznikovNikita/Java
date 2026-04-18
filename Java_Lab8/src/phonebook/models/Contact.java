@@ -1,7 +1,7 @@
-package phonebook;
-
+package phonebook.models;
 
 import java.util.Objects;
+import phonebook.utils.Checker;
 
 public class Contact {
     private String name;
@@ -11,7 +11,9 @@ public class Contact {
     public Contact(String name, String phoneNumber, String email) {
         setName(name);
         setPhoneNumber(phoneNumber);
-        setEmail(email);
+        if (email == null || email.trim().isEmpty())
+            email = "";
+        this.email = email;
     }
     public Contact(String name, String phoneNumber) {
         setName(name);
