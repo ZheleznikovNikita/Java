@@ -43,7 +43,7 @@ public class Contact {
     }
     public void setCategory(String category) {
         if (category == null || category.trim().isEmpty()) {
-            this.category = "";
+            this.category = "Без категории";
             return;
         }
         if (!CATEGORIES.contains(category.toLowerCase()))

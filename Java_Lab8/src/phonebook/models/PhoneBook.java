@@ -24,6 +24,30 @@ public class PhoneBook {
         return contacts.removeIf((Contact c) -> c.getPhoneNumber().equals(phoneNumber));
     }
 
+    public boolean updateContact(String oldPhone, String newName, String newPhone, String newEmail, String category) {
+        Contact contact = findByPhone(oldPhone);
+        if (contact == null) {
+            System.out.println("Контакт с номером " + oldPhone + " не найден.");
+            return false;
+        }
+
+        if (!oldPhone.equals(newPhone)) {
+            for (Contact c : contacts) {
+                if (c.getPhoneNumber().equals(newPhone)) {
+                    System.out.println("Новый номер уже занят другим контактом.");
+                    return false;
+                }
+            }
+        }
+
+        contact.setName(newName);
+        contact.setPhoneNumber(newPhone);
+        contact.setEmail(newEmail);
+        contact.setCategory(category);
+        System.out.println("Контакт успешно обновлён.");
+        return true;
+    }
+
     public ArrayList<Contact> findByName(String name) {
         ArrayList<Contact> res = new ArrayList<>();
         for (var elem : contacts)

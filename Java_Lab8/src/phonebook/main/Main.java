@@ -23,15 +23,16 @@ public class Main {
             System.out.println("\nМеню:");
             System.out.println("1. Добавить контакт");
             System.out.println("2. Удалить контакт");
-            System.out.println("3. Найти по имени");
-            System.out.println("4. Найти по номеру");
-            System.out.println("5. Найти по категории");
-            System.out.println("6. Показать все контакты");
-            System.out.println("7. Показать все, сгруппированные по категориям");
-            System.out.println("8. Сохранить в файл");
-            System.out.println("9. Загрузить из файла");
-            System.out.println("10. Экспорт в CSV");
-            System.out.println("11. Импорт из CSV");
+            System.out.println("3. Редактировать контакт");
+            System.out.println("4. Найти по имени");
+            System.out.println("5. Найти по номеру");
+            System.out.println("6. Найти по категории");
+            System.out.println("7. Показать все контакты");
+            System.out.println("8. Показать все, сгруппированные по категориям");
+            System.out.println("9. Сохранить в файл");
+            System.out.println("10. Загрузить из файла");
+            System.out.println("11. Экспорт в CSV");
+            System.out.println("12. Импорт из CSV");
             System.out.println("0. Выход");
             System.out.print("Выберите действие: ");
 
@@ -39,15 +40,16 @@ public class Main {
             switch (choice) {
                 case 1 -> addContact();
                 case 2 -> removeContact();
-                case 3 -> findByName();
-                case 4 -> findByPhone();
-                case 5 -> findByCategory();
-                case 6 -> showAllContacts();
-                case 7 -> showGroupedByCategory();
-                case 8 -> saveToTxt();
-                case 9 -> loadFromTxt();
-                case 10 -> exportToCsv();
-                case 11 -> importFromCsv();
+                case 3 -> editContact();
+                case 4 -> findByName();
+                case 5 -> findByPhone();
+                case 6 -> findByCategory();
+                case 7 -> showAllContacts();
+                case 8 -> showGroupedByCategory();
+                case 9 -> saveToTxt();
+                case 10 -> loadFromTxt();
+                case 11 -> exportToCsv();
+                case 12 -> importFromCsv();
                 case 0 -> { running = false; System.out.println("До свидания!"); }
                 default -> System.out.println("Неверный выбор. Введите число от 0 до 9.");
             }
@@ -117,6 +119,48 @@ public class Main {
         } else {
             System.out.println("Контакт с таким номером не найден");
         }
+    }
+
+    private static void editContact() {
+        System.out.print("Введите номер телефона контакта для редактирования: ");
+        String oldPhone = scanner.nextLine().trim();
+        Contact contact = phoneBook.findByPhone(oldPhone);
+
+        if (contact == null) {
+            System.out.println("Контакт не найден.");
+            return;
+        }
+
+        System.out.println("Текущие данные: " + contact);
+        System.out.println("Введите новые значения (нажмите Enter, чтобы оставить без изменений):");
+
+        System.out.print("Имя [" + contact.getName() + "]: ");
+        String newName = scanner.nextLine().trim();
+        if (newName.isEmpty())
+            newName = contact.getName();
+
+        System.out.print("Телефон [" + contact.getPhoneNumber() + "]: ");
+        String newPhone = scanner.nextLine().trim();
+        if (newPhone.isEmpty())
+            newPhone = contact.getPhoneNumber();
+        else {
+            if (!PhoneNumberValidator.isValid(newPhone)) {
+                System.out.println("Неверный формат нового номера. Отмена.");
+                return;
+            }
+        }
+
+        System.out.print("Email [" + contact.getEmail() + "]: ");
+        String newEmail = scanner.nextLine().trim();
+        if (newEmail.isEmpty())
+            newEmail = contact.getEmail();
+
+        System.out.print("Категория [" + contact.getCategory() + "]: ");
+        String newCategory = scanner.nextLine();
+        if (newCategory.isEmpty())
+            newCategory = contact.getCategory();
+
+        phoneBook.updateContact(oldPhone, newName, newPhone, newEmail, newCategory);
     }
 
     private static void findByName() {
