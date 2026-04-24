@@ -40,7 +40,7 @@ public class Contact {
 
     @Override
     public String toString() {
-        return String.format("%s: %s, %s", name, phoneNumber, email);
+        return email.trim().isEmpty() ? String.format("%s: %s", name, phoneNumber) : String.format("%s: %s, %s", name, phoneNumber, email);
     }
 
     @Override
@@ -49,13 +49,11 @@ public class Contact {
             return true;
         if (o == null || getClass() != o.getClass()) return false;
         Contact other = (Contact) o;
-        return Objects.equals(name, other.name)
-                && Objects.equals(phoneNumber, other.phoneNumber)
-                && Objects.equals(email, other.email);
+        return Objects.equals(phoneNumber, other.phoneNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, phoneNumber, email);
+        return Objects.hash(phoneNumber);
     }
 }

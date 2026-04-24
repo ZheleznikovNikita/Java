@@ -1,15 +1,16 @@
 package phonebook.models;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
 public class PhoneBook {
     private ArrayList<Contact> contacts;
+
+    public PhoneBook() {
+        contacts = new ArrayList<>();
+    }
 
     public boolean addContact(Contact contact) {
         if (contacts.contains(contact)){
@@ -25,7 +26,11 @@ public class PhoneBook {
     }
 
     public ArrayList<Contact> findByName(String name) {
-        return (ArrayList<Contact>)contacts.stream().filter((Contact c) -> c.getName().toLowerCase().contains(name.toLowerCase()));
+        ArrayList<Contact> res = new ArrayList<>();
+        for (var elem : contacts)
+            if (elem.getName().equalsIgnoreCase(name))
+                res.add(elem);
+        return res;
     }
 
     public Contact findByPhone(String phoneNumber) {
@@ -37,35 +42,45 @@ public class PhoneBook {
     }
 
     public ArrayList<Contact> getAllContacts() {
-        ArrayList<Contact> res = new ArrayList<>();
-        Collections.sort(res, Comparator.comparing(Contact::getName));
+        ArrayList<Contact> res = new ArrayList<>(contacts);
+        Collections.sort(res, Comparator.comparing(Contact::getName, String.CASE_INSENSITIVE_ORDER));
         return res;
     }
 
-    public void saveToFile(String filename) {
+    public void saveToFile(String filename) throws IOException {
         try (FileWriter fw = new FileWriter(filename, false)) {
             for (var elem : contacts) {
-                String cur = String.format("%s | %s | %s", elem.getName(), elem.getPhoneNumber(), elem.getEmail());
+                String cur = String.format("%s|%s|%s\n", elem.getName(), elem.getPhoneNumber(), elem.getEmail());
                 fw.write(cur);
                 fw.flush();
             }
         }
-        catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
     }
 
-    public void loadFromFile(String filename) {
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+    public void loadFromFile(String filename) throws IOException {
+        File file = new File(filename);
+        if (!file.exists())
+            throw new IOException("Файл не найден: " + filename);
+
+        ArrayList<Contact> tempContacts = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
-            while ((line = br.readLine()) != null){
-                var cur = line.trim().split("|");
-                Contact c = new Contact(cur[0], cur[1], cur[2]);
-                addContact(c);
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+
+                String[] parts = line.split("\\|", -1);
+                if (parts.length < 2)
+                    throw new IOException("Неверный формат строки в файле: " + line);
+
+                String name = parts[0].trim();
+                String phone = parts[1].trim();
+                String email = parts.length > 2 ? parts[2].trim() : "";
+                tempContacts.add(new Contact(name, phone, email));
             }
         }
-        catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
+
+        for (Contact c : tempContacts)
+            addContact(c);
     }
 }
