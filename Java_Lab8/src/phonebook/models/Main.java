@@ -25,6 +25,8 @@ public class Main {
             System.out.println("7. Показать все, сгруппированные по категориям");
             System.out.println("8. Сохранить в файл");
             System.out.println("9. Загрузить из файла");
+            System.out.println("10. Экспорт в CSV");
+            System.out.println("11. Импорт из CSV");
             System.out.println("0. Выход");
             System.out.print("Выберите действие: ");
 
@@ -37,8 +39,10 @@ public class Main {
                 case 5 -> findByCategory();
                 case 6 -> showAllContacts();
                 case 7 -> showGroupedByCategory();
-                case 8 -> saveToFile();
-                case 9 -> loadFromFile();
+                case 8 -> saveToTxt();
+                case 9 -> loadFromTxt();
+                case 10 -> exportToCsv();
+                case 11 -> importFromCsv();
                 case 0 -> { running = false; System.out.println("До свидания!"); }
                 default -> System.out.println("Неверный выбор. Введите число от 0 до 9.");
             }
@@ -151,34 +155,53 @@ public class Main {
         });
     }
 
-    private static void saveToFile() {
-        System.out.print("Введите имя файла для сохранения: ");
+    private static void saveToTxt() {
+        fileAction("сохранения (TXT)", filename -> {
+            try { phoneBook.saveToFile(filename); }
+            catch (IOException e) { throw new RuntimeException(e); }
+        });
+    }
+
+    private static void loadFromTxt() {
+        fileAction("загрузки (TXT)", filename -> {
+            try { phoneBook.loadFromFile(filename); }
+            catch (IOException e) { throw new RuntimeException(e); }
+        });
+    }
+
+    private static void exportToCsv() {
+        fileAction("экспорта в CSV", filename -> {
+            try { phoneBook.exportToCsv(filename); }
+            catch (IOException e) { throw new RuntimeException(e); }
+        });
+    }
+
+    private static void importFromCsv() {
+        fileAction("импорта из CSV", filename -> {
+            try { phoneBook.importFromCsv(filename); }
+            catch (IOException e) { throw new RuntimeException(e); }
+        });
+    }
+
+    // Универсальный обработчик файловых операций
+    private static void fileAction(String actionName, FileOperation op) {
+        System.out.print("Введите имя файла для " + actionName + ": ");
         String filename = scanner.nextLine().trim();
         if (filename.isEmpty()) {
-            System.out.println("Имя файла не может быть пустым");
+            System.out.println("Имя файла не может быть пустым.");
             return;
         }
         try {
-            phoneBook.saveToFile(filename);
-            System.out.println("Контакты сохранены в файл: " + filename);
-        } catch (IOException e) {
-            System.out.println("Ошибка при сохранении файла: " + e.getMessage());
+            op.execute(filename);
+            System.out.println("Операция завершена успешно.");
+        }
+        catch (Exception e) {
+            System.out.println("Ошибка: " + e.getCause().getMessage());
         }
     }
 
-    private static void loadFromFile() {
-        System.out.print("Введите имя файла для загрузки: ");
-        String filename = scanner.nextLine().trim();
-        if (filename.isEmpty()) {
-            System.out.println("Имя файла не может быть пустым");
-            return;
-        }
-        try {
-            phoneBook.loadFromFile(filename);
-            System.out.println("Контакты успешно загружены из файла: " + filename);
-        } catch (IOException e) {
-            System.out.println("Ошибка при загрузке файла: " + e.getMessage());
-            System.out.println("Телефонная книга осталась без изменений");
-        }
+    @FunctionalInterface
+    private interface FileOperation {
+        void execute(String filename) throws Exception;
     }
 }

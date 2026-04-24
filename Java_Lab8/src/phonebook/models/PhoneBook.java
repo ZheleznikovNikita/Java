@@ -91,4 +91,50 @@ public class PhoneBook {
         for (Contact c : tempContacts)
             addContact(c);
     }
+
+    public void exportToCsv(String filename) throws IOException {
+        try (FileWriter fw = new FileWriter(filename, false)) {
+            fw.write("Name,Phone,Email,Category\n");
+            for (Contact c : contacts) {
+                String name = c.getName().replace("\"", "\"\"");
+                String phoneNumber = c.getPhoneNumber().replace("\"", "\"\"");
+                String email = c.getEmail().replace("\"", "\"\"");
+                String category = c.getCategory().replace("\"", "\"\"");
+                fw.write(String.format("\"%s\",\"%s\",\"%s\",\"%s\"%n", name, phoneNumber, email, category));
+            }
+        }
+    }
+
+    public void importFromCsv(String filename) throws IOException {
+        File file = new File(filename);
+        if (!file.exists())
+            throw new IOException("Файл не найден: " + filename);
+
+        int added = 0, skipped = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            br.readLine();
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty())
+                    continue;
+
+                String[] parts = line.replace("\"", "").split(",", 4);
+                if (parts.length < 4)
+                    continue;
+
+                try {
+                    Contact c = new Contact(parts[0].trim(), parts[1].trim(), parts[2].trim(), parts[3].trim());
+                    if (addContact(c))
+                        added++;
+                    else
+                        skipped++;
+                }
+                catch (IllegalArgumentException e) {
+                    skipped++;
+                }
+            }
+        }
+        System.out.printf("Загружено: %d, пропущено дубликатов/ошибок: %d.%n", added, skipped);
+    }
 }
