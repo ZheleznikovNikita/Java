@@ -1,4 +1,9 @@
-package phonebook.models;
+package phonebook.main;
+
+import phonebook.models.Contact;
+import phonebook.models.PhoneBook;
+import phonebook.utils.PhoneNumberValidator;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,9 +66,8 @@ public class Main {
         }
     }
 
-    private static String readNonEmptyString(String prompt) {
+    private static String readNonEmptyString() {
         while (true) {
-            System.out.print(prompt);
             String input = scanner.nextLine().trim();
             if (!input.isEmpty())
                 return input;
@@ -71,10 +75,26 @@ public class Main {
         }
     }
 
+    private static String readValidPhone() {
+        while (true) {
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) {
+                System.out.println("Номер не может быть пустым.");
+                continue;
+            }
+            String formatted = PhoneNumberValidator.format(input);
+            if (PhoneNumberValidator.isValid(formatted))
+                return formatted;
+            System.out.println("Неверный формат номера.");
+        }
+    }
+
     private static void addContact() {
         try {
-            String name = readNonEmptyString("Введите имя: ");
-            String phone = readNonEmptyString("Введите номер телефона: ");
+            System.out.print("Введите имя: ");
+            String name = readNonEmptyString();
+            System.out.print("Телефона: ");
+            String phone = readValidPhone();
             System.out.print("Введите email (необязательно): ");
             String email = scanner.nextLine().trim();
             System.out.print("Введите категорию (необязательно): ");
@@ -91,7 +111,7 @@ public class Main {
     }
 
     private static void removeContact() {
-        String phone = readNonEmptyString("Введите номер телефона для удаления: ");
+        String phone = readValidPhone();
         if (phoneBook.removeContact(phone)) {
             System.out.println("Контакт удален");
         } else {
@@ -100,7 +120,8 @@ public class Main {
     }
 
     private static void findByName() {
-        String name = readNonEmptyString("Введите имя для поиска: ");
+        System.out.println("Введите имя для поиска: ");
+        String name = readNonEmptyString();
         ArrayList<Contact> found = phoneBook.findByName(name);
         if (found.isEmpty()) {
             System.out.println("Контакты не найдены");
@@ -111,7 +132,7 @@ public class Main {
     }
 
     private static void findByPhone() {
-        String phone = readNonEmptyString("Введите номер телефона для поиска: ");
+        String phone = readValidPhone();
         Contact found = phoneBook.findByPhone(phone);
         if (found != null) {
             System.out.println("Найден: " + found);

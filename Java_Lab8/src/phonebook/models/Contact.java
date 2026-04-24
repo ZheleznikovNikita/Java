@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import phonebook.utils.Checker;
+import phonebook.utils.PhoneNumberValidator;
 
 public class Contact {
     private static final Set<String> CATEGORIES = Set.of("семья", "работа", "друзья");
@@ -32,7 +33,10 @@ public class Contact {
     }
     public void setPhoneNumber(String phoneNumber) {
         Checker.check_string(phoneNumber);
-        this.phoneNumber = phoneNumber;
+        String formatted = PhoneNumberValidator.format(phoneNumber);
+        if (!PhoneNumberValidator.isValid(formatted))
+            throw new IllegalArgumentException("Неверный формат номера");
+        this.phoneNumber = formatted;
     }
     public void setEmail(String email) {
         this.email = (email == null || email.trim().isEmpty()) ? "" : email;
@@ -58,8 +62,8 @@ public class Contact {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Contact other = (Contact) o;
-        return Objects.equals(phoneNumber, other.phoneNumber);
+        Contact other = (Contact)o;
+        return Objects.equals(PhoneNumberValidator.normalize(phoneNumber), PhoneNumberValidator.normalize(other.phoneNumber));
     }
 
     @Override
