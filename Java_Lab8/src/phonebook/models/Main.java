@@ -1,6 +1,8 @@
 package phonebook.models;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 
@@ -11,30 +13,34 @@ public class Main {
     static void main(String[] args) {
         System.out.println("Телефонная книга");
         boolean running = true;
-        // непонятно почему в требованиях такая нумерация
+        // непонятно почему в требованиях нумерация с 4
         while (running) {
-            System.out.println("Меню:");
-            System.out.println("4. Добавить контакт");
-            System.out.println("5. Удалить контакт");
-            System.out.println("6. Найти по имени");
-            System.out.println("7. Найти по номеру");
-            System.out.println("8. Показать все контакты");
-            System.out.println("9. Сохранить в файл");
-            System.out.println("10. Загрузить из файла");
-            System.out.println("11. Выход");
+            System.out.println("\nМеню:");
+            System.out.println("1. Добавить контакт");
+            System.out.println("2. Удалить контакт");
+            System.out.println("3. Найти по имени");
+            System.out.println("4. Найти по номеру");
+            System.out.println("5. Найти по категории");
+            System.out.println("6. Показать все контакты");
+            System.out.println("7. Показать все, сгруппированные по категориям");
+            System.out.println("8. Сохранить в файл");
+            System.out.println("9. Загрузить из файла");
+            System.out.println("0. Выход");
             System.out.print("Выберите действие: ");
 
             int choice = readInt();
             switch (choice) {
-                case 4 -> addContact();
-                case 5 -> removeContact();
-                case 6 -> findByName();
-                case 7 -> findByPhone();
-                case 8 -> showAllContacts();
-                case 9 -> saveToFile();
-                case 10 -> loadFromFile();
-                case 11 -> { running = false; System.out.println("До свидания!"); }
-                default -> System.out.println("Неверный выбор. Введите число от 4 до 11");
+                case 1 -> addContact();
+                case 2 -> removeContact();
+                case 3 -> findByName();
+                case 4 -> findByPhone();
+                case 5 -> findByCategory();
+                case 6 -> showAllContacts();
+                case 7 -> showGroupedByCategory();
+                case 8 -> saveToFile();
+                case 9 -> loadFromFile();
+                case 0 -> { running = false; System.out.println("До свидания!"); }
+                default -> System.out.println("Неверный выбор. Введите число от 0 до 9.");
             }
         }
         scanner.close();
@@ -67,12 +73,15 @@ public class Main {
             String phone = readNonEmptyString("Введите номер телефона: ");
             System.out.print("Введите email (необязательно): ");
             String email = scanner.nextLine().trim();
+            System.out.print("Введите категорию (необязательно): ");
+            String category = scanner.nextLine();
 
-            Contact c = new Contact(name, phone, email);
+            Contact c = new Contact(name, phone, email, category);
             if (phoneBook.addContact(c)) {
                 System.out.println("Контакт успешно добавлен");
             }
-        } catch (IllegalArgumentException e) {
+        }
+        catch (IllegalArgumentException e) {
             System.out.println("Ошибка валидации: " + e.getMessage());
         }
     }
@@ -107,6 +116,18 @@ public class Main {
         }
     }
 
+    private static void findByCategory() {
+        System.out.print("Введите категорию: ");
+        String category = scanner.nextLine();
+        var found = phoneBook.findByCategory(category);
+        if (found.isEmpty())
+            System.out.println("Контакты в категории «" + category + "» не найдены.");
+        else {
+            System.out.println("Найдено в категории «" + category + "»: " + found.size());
+            found.forEach(System.out::println);
+        }
+    }
+
     private static void showAllContacts() {
         ArrayList<Contact> all = phoneBook.getAllContacts();
         if (all.isEmpty()) {
@@ -115,6 +136,19 @@ public class Main {
             System.out.println("Все контакты:");
             all.forEach(System.out::println);
         }
+    }
+
+    private static void showGroupedByCategory() {
+        Map<String, List<Contact>> grouped = phoneBook.getContactsGroupedByCategory();
+        if (grouped.isEmpty()) {
+            System.out.println("Телефонная книга пуста.");
+            return;
+        }
+
+        grouped.keySet().stream().sorted().forEach(cat -> {
+            System.out.println("\nКатегория: " + cat + " (" + grouped.get(cat).size() + ")");
+            grouped.get(cat).forEach(System.out::println);
+        });
     }
 
     private static void saveToFile() {

@@ -1,9 +1,8 @@
 package phonebook.models;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PhoneBook {
     private ArrayList<Contact> contacts;
@@ -41,6 +40,14 @@ public class PhoneBook {
         return res;
     }
 
+    public ArrayList<Contact> findByCategory(String category) {
+        return contacts.stream().filter(c -> c.getCategory().equalsIgnoreCase(category)).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public Map<String, List<Contact>> getContactsGroupedByCategory() {
+        return contacts.stream().collect(Collectors.groupingBy(Contact::getCategory));
+    }
+
     public ArrayList<Contact> getAllContacts() {
         ArrayList<Contact> res = new ArrayList<>(contacts);
         Collections.sort(res, Comparator.comparing(Contact::getName, String.CASE_INSENSITIVE_ORDER));
@@ -50,7 +57,7 @@ public class PhoneBook {
     public void saveToFile(String filename) throws IOException {
         try (FileWriter fw = new FileWriter(filename, false)) {
             for (var elem : contacts) {
-                String cur = String.format("%s|%s|%s\n", elem.getName(), elem.getPhoneNumber(), elem.getEmail());
+                String cur = String.format("%s|%s|%s|%s\n", elem.getName(), elem.getPhoneNumber(), elem.getEmail(), elem.getCategory());
                 fw.write(cur);
                 fw.flush();
             }
@@ -76,7 +83,8 @@ public class PhoneBook {
                 String name = parts[0].trim();
                 String phone = parts[1].trim();
                 String email = parts.length > 2 ? parts[2].trim() : "";
-                tempContacts.add(new Contact(name, phone, email));
+                String category = parts.length > 3 ? parts[3].trim() : "Без категории";
+                tempContacts.add(new Contact(name, phone, email, category));
             }
         }
 

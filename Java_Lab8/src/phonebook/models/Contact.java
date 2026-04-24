@@ -1,29 +1,30 @@
 package phonebook.models;
 
 import java.util.Objects;
+import java.util.Set;
+
 import phonebook.utils.Checker;
 
 public class Contact {
+    private static final Set<String> CATEGORIES = Set.of("семья", "работа", "друзья");
+
     private String name;
     private String phoneNumber;
     private String email;
+    private String category;
 
-    public Contact(String name, String phoneNumber, String email) {
+    public Contact(String name, String phoneNumber, String email, String category) {
         setName(name);
         setPhoneNumber(phoneNumber);
-        if (email == null || email.trim().isEmpty())
-            email = "";
-        this.email = email;
-    }
-    public Contact(String name, String phoneNumber) {
-        setName(name);
-        setPhoneNumber(phoneNumber);
+        setEmail(email);
+        setCategory(category);
     }
 
     // Геттеры
     public String getName() { return name; }
     public String getPhoneNumber() { return phoneNumber; }
     public String getEmail() { return email; }
+    public String getCategory() { return category; }
     // Сеттеры
     public void setName(String name) {
         Checker.check_string(name);
@@ -34,13 +35,22 @@ public class Contact {
         this.phoneNumber = phoneNumber;
     }
     public void setEmail(String email) {
-        Checker.check_string(email);
-        this.email = email;
+        this.email = (email == null || email.trim().isEmpty()) ? "" : email;
+    }
+    public void setCategory(String category) {
+        if (category == null || category.trim().isEmpty()) {
+            this.category = "";
+            return;
+        }
+        if (!CATEGORIES.contains(category.toLowerCase()))
+                throw new IllegalArgumentException("Такой категории нет");
+        this.category = category;
     }
 
     @Override
     public String toString() {
-        return email.trim().isEmpty() ? String.format("%s: %s", name, phoneNumber) : String.format("%s: %s, %s", name, phoneNumber, email);
+        return email.trim().isEmpty() ? String.format("%s: %s, [%s]", name, phoneNumber, category) :
+                String.format("%s: %s, %s, [%s]", name, phoneNumber, email, category);
     }
 
     @Override
