@@ -2,8 +2,10 @@ package phonebook.main;
 
 import phonebook.models.Contact;
 import phonebook.models.PhoneBook;
+import phonebook.utils.ActionLogger;
 import phonebook.utils.PhoneNumberValidator;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ public class Main {
     private static final Scanner scanner = new Scanner(System.in);
     private static final PhoneBook phoneBook = new PhoneBook();
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         System.out.println("Телефонная книга");
         boolean running = true;
         // непонятно почему в требованиях нумерация с 4
@@ -33,6 +35,7 @@ public class Main {
             System.out.println("10. Загрузить из файла");
             System.out.println("11. Экспорт в CSV");
             System.out.println("12. Импорт из CSV");
+            System.out.println("13. Показать логи");
             System.out.println("0. Выход");
             System.out.print("Выберите действие: ");
 
@@ -50,6 +53,7 @@ public class Main {
                 case 10 -> loadFromTxt();
                 case 11 -> exportToCsv();
                 case 12 -> importFromCsv();
+                case 13 -> showHistory();
                 case 0 -> { running = false; System.out.println("До свидания!"); }
                 default -> System.out.println("Неверный выбор. Введите число от 0 до 9.");
             }
@@ -105,6 +109,7 @@ public class Main {
             Contact c = new Contact(name, phone, email, category);
             if (phoneBook.addContact(c)) {
                 System.out.println("Контакт успешно добавлен");
+                ActionLogger.log("Добавлен контакт: " + name);
             }
         }
         catch (IllegalArgumentException e) {
@@ -118,6 +123,7 @@ public class Main {
             System.out.println("Контакт удален");
         } else {
             System.out.println("Контакт с таким номером не найден");
+            ActionLogger.log("Удалён контакт: " + phoneBook.findByPhone(phone).getName());
         }
     }
 
@@ -160,13 +166,15 @@ public class Main {
         if (newCategory.isEmpty())
             newCategory = contact.getCategory();
 
-        phoneBook.updateContact(oldPhone, newName, newPhone, newEmail, newCategory);
+        if (phoneBook.updateContact(oldPhone, newName, newPhone, newEmail, newCategory))
+            ActionLogger.log("Изменён контакт: " + oldPhone + " -> " + newPhone);
     }
 
     private static void findByName() {
         System.out.println("Введите имя для поиска: ");
         String name = readNonEmptyString();
         ArrayList<Contact> found = phoneBook.findByName(name);
+        ActionLogger.log("Поиск по имени: " + name);
         if (found.isEmpty()) {
             System.out.println("Контакты не найдены");
         } else {
@@ -178,6 +186,7 @@ public class Main {
     private static void findByPhone() {
         String phone = readValidPhone();
         Contact found = phoneBook.findByPhone(phone);
+        ActionLogger.log("Поиск по номеру: " + phone);
         if (found != null) {
             System.out.println("Найден: " + found);
         } else {
@@ -188,6 +197,7 @@ public class Main {
     private static void findByCategory() {
         System.out.print("Введите категорию: ");
         String category = scanner.nextLine();
+        ActionLogger.log("Поиск по категории: " + category);
         var found = phoneBook.findByCategory(category);
         if (found.isEmpty())
             System.out.println("Контакты в категории «" + category + "» не найдены.");
@@ -199,6 +209,7 @@ public class Main {
 
     private static void showAllContacts() {
         ArrayList<Contact> all = phoneBook.getAllContacts();
+        ActionLogger.log("Демонстрация всех контактов");
         if (all.isEmpty()) {
             System.out.println("Телефонная книга пуста");
         } else {
@@ -209,6 +220,7 @@ public class Main {
 
     private static void showGroupedByCategory() {
         Map<String, List<Contact>> grouped = phoneBook.getContactsGroupedByCategory();
+        ActionLogger.log("Демонстрация контактов по группам");
         if (grouped.isEmpty()) {
             System.out.println("Телефонная книга пуста.");
             return;
@@ -222,30 +234,34 @@ public class Main {
 
     private static void saveToTxt() {
         fileAction("сохранения (TXT)", filename -> {
-            try { phoneBook.saveToFile(filename); }
+            try { phoneBook.saveToFile(filename); ActionLogger.log("Сохранение в файл: " + filename); }
             catch (IOException e) { throw new RuntimeException(e); }
         });
     }
 
     private static void loadFromTxt() {
         fileAction("загрузки (TXT)", filename -> {
-            try { phoneBook.loadFromFile(filename); }
+            try { phoneBook.loadFromFile(filename); ActionLogger.log("Загрузка из файла" + filename); }
             catch (IOException e) { throw new RuntimeException(e); }
         });
     }
 
     private static void exportToCsv() {
         fileAction("экспорта в CSV", filename -> {
-            try { phoneBook.exportToCsv(filename); }
+            try { phoneBook.exportToCsv(filename); ActionLogger.log("Загрузка в таблицу: " + filename); }
             catch (IOException e) { throw new RuntimeException(e); }
         });
     }
 
     private static void importFromCsv() {
         fileAction("импорта из CSV", filename -> {
-            try { phoneBook.importFromCsv(filename); }
+            try { phoneBook.importFromCsv(filename); ActionLogger.log("Загрузка из таблицы: " + filename);}
             catch (IOException e) { throw new RuntimeException(e); }
         });
+    }
+
+    private static void showHistory() {
+        ActionLogger.showHistory();
     }
 
     // Универсальный обработчик файловых операций
