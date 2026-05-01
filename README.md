@@ -19,6 +19,7 @@
   - [Lab 5: OOP Fundamentals](#java-lab-5-oop-fundamentals)
   - [Lab 6: Domain Modeling](#java-lab-6-domain-modeling)
   - [Lab 7: Advanced OOP Concepts](#java-lab-7-advanced-oop-concepts)
+  - [Lab 8: Phone Book Application](#java-lab-8-phone-book-application)
 - [Requirements](#requirements)
 - [How to Compile and Run](#how-to-compile-and-run)
 - [Project Statistics](#project-statistics)
@@ -58,12 +59,18 @@ This repository contains a comprehensive collection of Java laboratory assignmen
 │       ├── order/      # Order processing system
 │       ├── store/      # Store inventory management
 │       └── university/ # University management system
-└── Java_Lab7/          # Advanced OOP concepts
+├── Java_Lab7/          # Advanced OOP concepts
+│   └── src/
+│       ├── main/       # Main application
+│       ├── models/     # Advanced model implementations
+│       ├── services/   # Service layer implementations
+│       └── utils/      # Utility functions
+└── Java_Lab8/          # Phone Book Application
     └── src/
-        ├── main/       # Main application
-        ├── models/     # Advanced model implementations
-        ├── services/   # Service layer implementations
-        └── utils/      # Utility functions
+        └── phonebook/
+            ├── main/       # Main application entry point
+            ├── models/     # Contact and PhoneBook models
+            └── utils/      # Validators and logging utilities
 ```
 
 ---
@@ -156,6 +163,15 @@ This repository contains a comprehensive collection of Java laboratory assignmen
 - Initialization demonstrations
 - Advanced utility classes
 
+### Java Lab 8: Phone Book Application
+
+**Focus:** Practical application with data management and validation
+
+**Structure:**
+- **Models:** `Contact`, `PhoneBook` - data structures for contact management
+- **Utils:** `PhoneNumberValidator`, `ActionLogger`, `Checker` - validation and logging utilities
+- **Main:** Application entry point with interactive phone book functionality
+
 ---
 
 ## ⚙️ Requirements
@@ -210,8 +226,8 @@ cd Java_Lab1/src && javac *.java && java Main
 
 | Metric | Value |
 |--------|-------|
-| **Total Java Files** | 101 |
-| **Lab Directories** | 7 |
+| **Total Java Files** | 107 |
+| **Lab Directories** | 8 |
 | **Primary Language** | Java |
 | **Code Comments** | Russian |
 | **Project Structure** | Modular (by lab/task) |
@@ -224,9 +240,10 @@ cd Java_Lab1/src && javac *.java && java Main
 | Lab 2 | 9 | Arrays & Logic |
 | Lab 3 | 10 | File Operations |
 | Lab 4 | 8 | Advanced Algorithms |
-| Lab 5 | ~10 | OOP Basics |
-| Lab 6 | ~30 | Domain Models |
-| Lab 7 | ~25 | Advanced OOP |
+| Lab 5 | 9 | OOP Basics |
+| Lab 6 | 43 | Domain Models |
+| Lab 7 | 13 | Advanced OOP |
+| Lab 8 | 6 | Phone Book Application |
 
 ---
 
