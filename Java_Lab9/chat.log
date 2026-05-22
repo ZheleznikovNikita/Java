@@ -1,0 +1,4 @@
+2026-05-16 09:29:38 | CONNECT nikita from 127.0.0.1:58651
+2026-05-16 09:29:42 | COMMAND /users from nikita
+2026-05-16 09:29:58 | PUBLIC nikita: привет
+2026-05-16 09:30:16 | DISCONNECT nikita
