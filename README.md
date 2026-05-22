@@ -20,6 +20,8 @@
   - [Lab 6: Domain Modeling](#java-lab-6-domain-modeling)
   - [Lab 7: Advanced OOP Concepts](#java-lab-7-advanced-oop-concepts)
   - [Lab 8: Phone Book Application](#java-lab-8-phone-book-application)
+  - [Lab 9: Chat Application](#java-lab-9-chat-application)
+  - [Lab 10: HTTP Server](#java-lab-10-http-server)
 - [Requirements](#requirements)
 - [How to Compile and Run](#how-to-compile-and-run)
 - [Project Statistics](#project-statistics)
@@ -65,12 +67,24 @@ This repository contains a comprehensive collection of Java laboratory assignmen
 │       ├── models/     # Advanced model implementations
 │       ├── services/   # Service layer implementations
 │       └── utils/      # Utility functions
-└── Java_Lab8/          # Phone Book Application
+├── Java_Lab8/          # Phone Book Application
+│   └── src/
+│       └── phonebook/
+│           ├── main/       # Main application entry point
+│           ├── models/     # Contact and PhoneBook models
+│           └── utils/      # Validators and logging utilities
+├── Java_Lab9/          # Chat Application (Client-Server)
+│   └── src/
+│       ├── main/           # Main application entry point
+│       └── chat/
+│           ├── client/     # Chat client implementation
+│           └── server/     # Chat server with client handlers
+└── Java_Lab10/         # HTTP Server
     └── src/
-        └── phonebook/
-            ├── main/       # Main application entry point
-            ├── models/     # Contact and PhoneBook models
-            └── utils/      # Validators and logging utilities
+        ├── main/           # Main application entry point
+        └── httpserver/
+            ├── core/       # Core HTTP server components (handlers, utilities)
+            └── handlers/   # Request handlers (Echo, File, Data, Status)
 ```
 
 ---
@@ -172,6 +186,35 @@ This repository contains a comprehensive collection of Java laboratory assignmen
 - **Utils:** `PhoneNumberValidator`, `ActionLogger`, `Checker` - validation and logging utilities
 - **Main:** Application entry point with interactive phone book functionality
 
+### Java Lab 9: Chat Application
+
+**Focus:** Client-server architecture with socket programming
+
+**Structure:**
+- **Client:** `ChatClient` - connects to the chat server and sends/receives messages
+- **Server:** `ChatServer`, `ClientHandler` - manages multiple client connections concurrently
+- **Main:** Application entry point for launching client or server
+
+**Key Features:**
+- Multi-client support with individual handlers
+- Real-time message broadcasting
+- Socket-based communication
+
+### Java Lab 10: HTTP Server
+
+**Focus:** Building a simple HTTP server from scratch
+
+**Structure:**
+- **Core:** `BaseHandler`, `HttpResponses`, `QueryParser`, `AccessLogger`, `BadRequestException`, `TimeUnitUtils` - foundational HTTP server components
+- **Handlers:** `EchoHandler`, `FileHandler`, `DataHandler`, `HelloHandler`, `StatusHandler`, `NotFoundHandler` - request-specific handlers
+- **Main:** `SimpleHttpServer` - main server implementation
+
+**Key Features:**
+- HTTP request parsing and routing
+- Multiple endpoint handlers (echo, file serving, status, data)
+- Access logging and error handling
+- Query parameter parsing
+
 ---
 
 ## ⚙️ Requirements
@@ -226,8 +269,8 @@ cd Java_Lab1/src && javac *.java && java Main
 
 | Metric | Value |
 |--------|-------|
-| **Total Java Files** | 107 |
-| **Lab Directories** | 8 |
+| **Total Java Files** | 125 |
+| **Lab Directories** | 10 |
 | **Primary Language** | Java |
 | **Code Comments** | Russian |
 | **Project Structure** | Modular (by lab/task) |
@@ -244,6 +287,8 @@ cd Java_Lab1/src && javac *.java && java Main
 | Lab 6 | 43 | Domain Models |
 | Lab 7 | 13 | Advanced OOP |
 | Lab 8 | 6 | Phone Book Application |
+| Lab 9 | 4 | Chat Application (Client-Server) |
+| Lab 10 | 14 | HTTP Server |
 
 ---
 
