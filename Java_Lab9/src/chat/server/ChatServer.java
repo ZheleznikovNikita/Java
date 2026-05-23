@@ -189,7 +189,7 @@ public class ChatServer {
             synchronized (clients) {
                 snapshot = clients.stream()
                         .sorted(Comparator.comparing(ClientHandler::getNickname, String.CASE_INSENSITIVE_ORDER))
-                        .toList();
+                        .collect(Collectors.toList());
             }
 
             long now = System.currentTimeMillis();
