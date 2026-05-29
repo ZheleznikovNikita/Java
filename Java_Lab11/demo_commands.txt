@@ -1,0 +1,82 @@
+КОМАНДЫ ДЛЯ ДЕМОНСТРАЦИИ JAVA_LAB11 TASK MANAGER
+=================================================
+
+1. ПЕРЕЙТИ В ПАПКУ ПРОЕКТА
+--------------------------
+cd /d D:\Java\Java_Lab11
+
+
+2. СОБРАТЬ ПРОЕКТ
+-----------------
+Если Maven доступен в PATH:
+
+mvn clean package
+
+Если Maven не доступен в PATH, но установлен IntelliJ IDEA:
+
+"C:\Program Files\JetBrains\IntelliJ IDEA 2026.1\plugins\maven\lib\maven3\bin\mvn.cmd" clean package
+
+
+3. ЗАПУСТИТЬ ПРОЕКТ
+-------------------
+Вариант 1: через Maven:
+
+mvn spring-boot:run
+
+Вариант 2: через Maven из IntelliJ IDEA:
+
+"C:\Program Files\JetBrains\IntelliJ IDEA 2026.1\plugins\maven\lib\maven3\bin\mvn.cmd" spring-boot:run
+
+Вариант 3: через готовый JAR после сборки:
+
+java -jar target\task-manager-0.0.1-SNAPSHOT.jar
+
+После запуска сервер доступен по адресу:
+
+http://localhost:8080
+
+
+ПОЛУЧИТЬ ВСЕ ЗАДАЧИ
+curl -i http://localhost:8080/tasks
+
+СОЗДАТЬ ПЕРВУЮ ЗАДАЧУ
+curl -i -X POST http://localhost:8080/tasks ^
+  -H "Content-Type: application/json" ^
+  -d "{\"title\":\"Купить молоко\",\"description\":\"После занятий\",\"completed\":false}"
+
+CОЗДАТЬ ВТОРУЮ ЗАДАЧУ
+curl -i -X POST http://localhost:8080/tasks ^
+  -H "Content-Type: application/json" ^
+  -d "{\"title\":\"Сделать лабораторную\",\"description\":\"Проверить REST API\",\"completed\":false}"
+
+
+ПРОВЕРИТЬ ВАЛИДАЦИЮ ПУСТОГО TITLE
+curl -i -X POST http://localhost:8080/tasks ^
+  -H "Content-Type: application/json" ^
+  -d "{\"title\":\"   \",\"description\":\"Некорректная задача\",\"completed\":false}"
+
+ПОЛУЧИТЬ ЗАДАЧУ ПО ID
+curl -i http://localhost:8080/tasks/1
+
+ПРОВЕРИТЬ ОШИБКУ 404 ДЛЯ НЕСУЩЕСТВУЮЩЕЙ ЗАДАЧИ
+curl -i http://localhost:8080/tasks/999
+
+ОБНОВИТЬ ЗАДАЧУ
+curl -i -X PUT http://localhost:8080/tasks/1 ^
+  -H "Content-Type: application/json" ^
+  -d "{\"title\":\"Купить хлеб\",\"description\":\"Задача обновлена через PUT\",\"completed\":true}"
+
+ПОИСК ПО ЧАСТИ НАЗВАНИЯ
+curl -i "http://localhost:8080/tasks/search?title=лаб"
+
+ПАГИНАЦИЯ
+curl -i "http://localhost:8080/tasks?page=0&size=1"
+
+УДАЛИТЬ ЗАДАЧУ
+curl -i -X DELETE http://localhost:8080/tasks/1
+
+ПОВТОРНО УДАЛИТЬ ТУ ЖЕ ЗАДАЧУ
+curl -i -X DELETE http://localhost:8080/tasks/1
+
+ПРОВЕРИТЬ СОХРАНЕНИЕ В ФАЙЛ
+type tasks.json

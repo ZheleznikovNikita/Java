@@ -1,0 +1,10 @@
+com\example\taskmanager\controller\TaskController.class
+com\example\taskmanager\exception\ErrorResponse.class
+com\example\taskmanager\web\WebConfig.class
+com\example\taskmanager\service\TaskPage.class
+com\example\taskmanager\service\TaskService$1.class
+com\example\taskmanager\exception\RestExceptionHandler.class
+com\example\taskmanager\model\Task.class
+com\example\taskmanager\service\TaskService.class
+com\example\taskmanager\TaskManagerApplication.class
+com\example\taskmanager\web\RequestLoggingInterceptor.class
